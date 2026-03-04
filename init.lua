@@ -813,20 +813,12 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+    'ellisonleao/gruvbox.nvim',
     config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
-      }
-
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'gruvbox'
     end,
   },
 
@@ -868,6 +860,40 @@ require('lazy').setup({
       --  Check out: https://github.com/nvim-mini/mini.nvim
     end,
   },
+  {
+    'nomnivore/ollama.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+
+    -- All the user commands added by the plugin
+    cmd = { 'Ollama', 'OllamaModel', 'OllamaServe', 'OllamaServeStop' },
+
+    keys = {
+      -- Sample keybind for prompt menu. Note that the <c-u> is important for selections to work properly.
+      {
+        '<leader>oo',
+        ":<c-u>lua require('ollama').prompt()<cr>",
+        desc = 'ollama prompt',
+        mode = { 'n', 'v' },
+      },
+
+      -- Sample keybind for direct prompting. Note that the <c-u> is important for selections to work properly.
+      {
+        '<leader>oG',
+        ":<c-u>lua require('ollama').prompt('Generate_Code')<cr>",
+        desc = 'ollama Generate Code',
+        mode = { 'n', 'v' },
+      },
+    },
+
+    ---@type Ollama.Config
+    opts = {
+      -- your configuration overrides
+      model = 'mistral',
+      url = 'http://ollama.munchkin-frog.ts.net:11434',
+    },
+  },
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -879,6 +905,17 @@ require('lazy').setup({
         callback = function() vim.treesitter.start() end,
       })
     end,
+  },
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    branch = 'v3.x',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons',
+      'MunifTanjim/nui.nvim',
+      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
+    keys = { { '<leader>e', '<cmd>Neotree toggle<cr>', desc = 'open neotree' } },
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
